@@ -5,6 +5,7 @@ import AnnouncementBar from '../sections/AnnouncementBar';
 import Header from '../sections/Header';
 import Navigation from '../sections/Navigation';
 import Footer from '../sections/Footer';
+import SchoolProjectsModal from '../components/SchoolProjectsModal';
 
 /* ── Mock data — replace with real API data later ── */
 const categories = [
@@ -114,6 +115,7 @@ function formatEGP(n) {
 
 export default function HandcraftSuppliesPage() {
   const [activeCategory, setActiveCategory] = useState('paper-crafts');
+  const [isSchoolProjectsOpen, setIsSchoolProjectsOpen] = useState(false);
   const activeCategoryLabel = useMemo(
     () => categories.find((c) => c.id === activeCategory)?.label ?? '',
     [activeCategory]
@@ -121,7 +123,7 @@ export default function HandcraftSuppliesPage() {
   const products = productsByCategory[activeCategory] ?? [];
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-[#121212]">
+    <div className="min-h-screen overflow-x-hidden bg-[var(--page-bg)] text-[var(--primary-text)]">
       <Helmet>
         <title>Handcraft Supplies | El-D7E7</title>
         <meta
@@ -158,7 +160,7 @@ export default function HandcraftSuppliesPage() {
                 onClick={() => setActiveCategory(cat.id)}
                 className={`flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-xs font-semibold transition ${
                   activeCategory === cat.id
-                    ? 'bg-pink-500 text-white'
+                    ? 'bg-[#c53938] text-white'
                     : 'border border-[var(--soft-border-color)] text-[var(--secondary-text)] hover:text-[var(--primary-text)]'
                 }`}
               >
@@ -256,26 +258,38 @@ export default function HandcraftSuppliesPage() {
         {/* ── Promo strips ── */}
         <section className="mx-auto max-w-[1280px] px-5 py-8 sm:px-8">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {promoStrips.map((promo) => (
-              <a
-                key={promo.id}
-                href="#"
-                className="flex items-center gap-3 rounded-xl border border-[var(--soft-border-color)] bg-[var(--surface-bg)] p-4 transition hover:border-[#c53938]/40"
-              >
-                <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${promo.iconBg}`}>
-                  <PromoIcon type={promo.icon} />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-semibold text-[var(--primary-text)]">{promo.title}</p>
-                  <p className="truncate text-xs text-[var(--secondary-text)]">{promo.subtitle}</p>
-                </div>
-                <svg className="h-4 w-4 shrink-0 text-[var(--secondary-text)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 6l6 6-6 6" />
-                </svg>
-              </a>
-            ))}
+            {promoStrips.map((promo) => {
+              const isSchoolProjects = promo.id === 'school-projects';
+              const Tag = isSchoolProjects ? 'button' : 'a';
+
+              return (
+                <Tag
+                  key={promo.id}
+                  {...(isSchoolProjects
+                    ? { type: 'button', onClick: () => setIsSchoolProjectsOpen(true) }
+                    : { href: '#' })}
+                  className="flex w-full items-center gap-3 rounded-xl border border-[var(--soft-border-color)] bg-[var(--surface-bg)] p-4 text-left transition hover:border-[#c53938]/40"
+                >
+                  <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full ${promo.iconBg}`}>
+                    <PromoIcon type={promo.icon} />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold text-[var(--primary-text)]">{promo.title}</p>
+                    <p className="truncate text-xs text-[var(--secondary-text)]">{promo.subtitle}</p>
+                  </div>
+                  <svg className="h-4 w-4 shrink-0 text-[var(--secondary-text)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 6l6 6-6 6" />
+                  </svg>
+                </Tag>
+              );
+            })}
           </div>
         </section>
+
+        <SchoolProjectsModal
+          isOpen={isSchoolProjectsOpen}
+          onClose={() => setIsSchoolProjectsOpen(false)}
+        />
 
         <Footer />
       </main>

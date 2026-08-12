@@ -21,7 +21,8 @@ import AdminProtectedRoute from './components/admin/AdminProtectedRoute';
 import CustomerManagementPage from './pages/admin/CustomerManagementPage';
 import OrderManagementPage from './pages/admin/OrderManagementPage';
 import ProductManagementPage from './pages/admin/ProductManagementPage';
-
+import HandcraftSuppliesPage from './pages/HandcraftSuppliesPage';
+import ExternalSchoolBooksPage from './pages/ExternalSchoolBooksPage';
 import Checkout from './pages/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
 function PlaceholderPage({ title }) {
@@ -87,16 +88,12 @@ export default function App() {
 
       <Route
         path="/external-school-books"
-        element={
-          <PlaceholderPage title="External School Books" />
-        }
+         element={<ExternalSchoolBooksPage />}
       />
 
       <Route
         path="/handcraft-supplies"
-        element={
-          <PlaceholderPage title="Handcraft Supplies" />
-        }
+        element={<HandcraftSuppliesPage />}
       />
 
       {/* Protected account pages */}
